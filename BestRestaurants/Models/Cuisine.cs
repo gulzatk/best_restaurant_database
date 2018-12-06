@@ -104,9 +104,11 @@ namespace BestRestaurants.Models
       {
         int restaurantId = rdr.GetInt32(0);
         string restaurantName = rdr.GetString(1);
-        int restaurantRating = rdr.GetInt32(2);
-        int restaurantCuisineId = rdr.GetInt32(3);
-        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, restaurantCuisineId, restaurantId);
+        string restaurantBestFood = rdr.GetString(2);
+        string restaurantCity = rdr.GetString(3);
+        string restaurantState = rdr.GetString(4);
+        int restaurantCuisineId = rdr.GetInt32(5);
+        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantBestFood, restaurantCity, restaurantState, restaurantCuisineId, restaurantId);
         allRestaurants.Add(newRestaurant);
       }
       conn.Close();

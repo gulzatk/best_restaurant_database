@@ -7,16 +7,20 @@ namespace BestRestaurants.Models
   {
     private string _rName;
     private int _id;
-    private int _rating;
+    private string _city;
+    private string _state;
+    private string _bestFood;
     private int _cuisine_id;
 
 
-    public Restaurant (string name, int rating, int cuisineId, int id = 0)
+    public Restaurant (string name, bestFood, string city, string state, int cuisineId, int id = 0)
     {
       _rName = name;
-      _id = id;
-      _rating = rating;
+      _city = city;
+      _state = state;
+      _bestFood = bestFood;
       _cuisine_id = cuisineId;
+      _id = id;
 
     }
 
@@ -35,9 +39,19 @@ namespace BestRestaurants.Models
       return _id;
     }
 
-    public int GetRating()
+    public int GetCity()
     {
-      return _rating;
+      return _city;
+    }
+
+    public int GetState()
+    {
+      return _state;
+    }
+
+    public string GetBestFood()
+    {
+      return _bestFood;
     }
 
     public int GetCuisineId()
@@ -57,9 +71,11 @@ namespace BestRestaurants.Models
       {
         int restaurantId = rdr.GetInt32(0);
         string restaurantName = rdr.GetString(1);
-        int restaurantRating = rdr.GetInt32(2);
-        int cuisineId = rdr.GetInt32(3);
-        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, restaurantId, cuisineId);
+        string restaurantCity = rdr.GetString(2);
+        string restaurantState = rdr.GetString(3);
+        string restaurantBestFood = rdr.GetString(4);
+        int cuisineId = rdr.GetInt32(5);
+        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantBestFood, restaurantCity, restaurantState, restaurantId, cuisineId);
         allRestaurants.Add(newRestaurant);
       }
       conn.Close();
@@ -96,9 +112,11 @@ namespace BestRestaurants.Models
       {
         int restaurantId = rdr.GetInt32(0);
         string restaurantName = rdr.GetString(1);
-        int restaurantRating = rdr.GetInt32(2);
-        int cuisineId = rdr.GetInt32(3);
-        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, cuisineId, restaurantId);
+        string restaurantBestFood = rdr.GetString(2);
+        string restaurantCity = rdr.GetString(3);
+        string restaurantState = rdr.GetString(4);
+        int cuisineId = rdr.GetInt32(5);
+        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantBestFood, restaurantCity, restaurantState, cuisineId, restaurantId);
         restaurants.Add(newRestaurant);
       }
       conn.Close();
@@ -141,16 +159,20 @@ namespace BestRestaurants.Models
       var rdr = cmd.ExecuteReader() as MySqlDataReader;
       int restaurantId = 0;
       string restaurantName = "";
-      int restaurantRating = 0;
+      string restaurantBestFood = "";
+      string restaurantCity = "";
+      string restaurantState = "";
       int cuisineId = 0;
       while(rdr.Read())
       {
-        restaurantId = rdr.GetInt32(0);
-        restaurantName = rdr.GetString(1);
-        restaurantRating = rdr.GetInt32(2);
-        cuisineId = rdr.GetInt32(3);
+        int restaurantId = rdr.GetInt32(0);
+        string restaurantName = rdr.GetString(1);
+        string restaurantBestFood = rdr.GetString(2);
+        string restaurantCity = rdr.GetString(3);
+        string restaurantState = rdr.GetString(4);
+        int cuisineId = rdr.GetInt32(5);
       }
-      Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, cuisineId, restaurantId);
+      Restaurant newRestaurant = new Restaurant(restaurantName, restaurantBestFood, restaurantCity, restaurantState, cuisineId, restaurantId);
       conn.Close();
       if (conn != null)
       {
@@ -170,9 +192,11 @@ namespace BestRestaurants.Models
         Restaurant newRestaurant = (Restaurant) otherRestaurant;
         bool idEquality = this.GetId() == newRestaurant.GetId();
         bool nameEquality = this.GetName() == newRestaurant.GetName();
-        bool ratingEquality = this.GetRating() == newRestaurant.GetRating();
-        bool cuisineEquality = this.GetCuisineId() == newRestaurant.GetCuisineId();
-        return (idEquality && nameEquality && ratingEquality && cuisineEquality);
+        bool bestFoodEquality = this.GetBestFood() == newRestaurant.GetBestFood();
+        bool cityEquality = this.GetCity() == newRestaurant.GetCity();
+        bool stateEquality = this.GetState() == newRestaurant.GetState();
+        bool cuisineIdEquality = this.GetCuisineId() == newRestaurant.GetCuisineId();
+        return (idEquality && nameEquality && bestFoodEquality && cityEquality && stateEquality && cuisineEquality);
       }
     }
 
@@ -181,15 +205,23 @@ namespace BestRestaurants.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO restaurants (name, rating, cuisine_id) VALUES (@name, @rating, @cuisine_id);";
+      cmd.CommandText = @"INSERT INTO restaurants (name, bestFood, city, state, cuisine_id) VALUES (@name, @bestFood, @city, @state, @cuisine_id);";
       MySqlParameter name = new MySqlParameter();
       name.ParameterName = "@name";
       name.Value = this._rName;
       cmd.Parameters.Add(name);
-      MySqlParameter rating = new MySqlParameter();
-      rating.ParameterName = "@rating";
-      rating.Value = this._rating;
-      cmd.Parameters.Add(rating);
+      MySqlParameter bestFood = new MySqlParameter();
+      bestFood.ParameterName = "@bestFood";
+      bestFood.Value = this._bestFood;
+      cmd.Parameters.Add(bestFood);
+      MySqlParameter city = new MySqlParameter();
+      city.ParameterName = "@city";
+      city.Value = this._city;
+      cmd.Parameters.Add(city);
+      MySqlParameter state = new MySqlParameter();
+      state.ParameterName = "@state";
+      state.Value = this._state;
+      cmd.Parameters.Add(state);
       MySqlParameter cuisineId = new MySqlParameter();
       cuisineId.ParameterName = "@cuisine_id";
       cuisineId.Value = this._cuisine_id;

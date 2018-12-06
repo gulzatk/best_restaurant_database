@@ -1,0 +1,22 @@
+@{
+  Layout = "_Layout";
+}
+
+<div class="container">
+
+  <h1>Cuisines</h1>
+
+  @if (@Model.Count == 0)
+  {
+    <h3>No cuisines exist!</h3>
+  }
+
+  @foreach (var cuisine in Model)
+  {
+    <h3><a href='/cuisines/@cuisine.GetId()'>@cuisine.GetName()</a></h3>
+    <p><a href='/cuisines/@cuisine.GetId()/delete'>Delete This Cuisine</a></p>
+    <br>
+  }
+
+  <p><a href='/'>Back home</a></p>
+</div>

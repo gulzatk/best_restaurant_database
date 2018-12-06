@@ -1,0 +1,17 @@
+@{
+  Layout = "_Layout";
+}
+
+<div class="container">
+
+  <h1>Add a new restaurant to @Model.GetName()</h1>
+
+  <form action='/cuisines/@Model.GetId()/restaurants' method='post'>
+    <input id='cuisineId' name='cuisineId' type='hidden' value='@Model.GetId()'>
+    <label for='restaurantName'>Restaurant name</label>
+    <input id='restaurantName' name='restaurantName' type='text'>
+    <label for='restaurantRating'>Restaurant rate</label>
+    <input id='restaurantRating' name='restaurantRating' type='number'>
+    <button type='submit'>Add restaurant</button>
+  </form>
+</div>

@@ -11,7 +11,7 @@ namespace BestRestaurants.Models
     private int _cuisine_id;
 
 
-    public Restaurant (string name, int rating, int id = 0, int cuisine_id)
+    public Restaurant (string name, int rating, int cuisineId, int id = 0)
     {
       _rName = name;
       _id = id;
@@ -27,12 +27,17 @@ namespace BestRestaurants.Models
 
     public void SetName(string newName)
     {
-      _rNAme = newName
+      _rName = newName;
     }
 
     public int GetId()
     {
       return _id;
+    }
+
+    public int GetRating()
+    {
+      return _rating;
     }
 
     public int GetCuisineId()
@@ -54,7 +59,7 @@ namespace BestRestaurants.Models
         string restaurantName = rdr.GetString(1);
         int restaurantRating = rdr.GetInt32(2);
         int cuisineId = rdr.GetInt32(3);
-        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantId, restaurantRating, cuisineId);
+        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, restaurantId, cuisineId);
         allRestaurants.Add(newRestaurant);
       }
       conn.Close();
@@ -91,9 +96,9 @@ namespace BestRestaurants.Models
       {
         int restaurantId = rdr.GetInt32(0);
         string restaurantName = rdr.GetString(1);
-        int restaurantRating = rdr.GetInt32(2)
+        int restaurantRating = rdr.GetInt32(2);
         int cuisineId = rdr.GetInt32(3);
-        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating cuisineId, restaurantId);
+        Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, cuisineId, restaurantId);
         restaurants.Add(newRestaurant);
       }
       conn.Close();
@@ -104,24 +109,24 @@ namespace BestRestaurants.Models
       return restaurants;
     }
 
-    // public static void DeleteItem(int id)
-    // {
-    //   MySqlConnection conn = DB.Connection();
-    //   conn.Open();
-    //   var cmd = conn.CreateCommand() as MySqlCommand;
-    //   cmd.CommandText = @"DELETE FROM items WHERE id = (@thisId);";
-    //
-    //   MySqlParameter thisId = new MySqlParameter();
-    //   thisId.ParameterName = "@thisId";
-    //   thisId.Value = id;
-    //   cmd.Parameters.Add(thisId);
-    //   cmd.ExecuteNonQuery();
-    //   conn.Close();
-    //   if (conn != null)
-    //   {
-    //    conn.Dispose();
-    //   }
-    // }
+    public static void DeleteRestaurants(int id)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"DELETE FROM restaurants WHERE id = (@thisId);";
+
+      MySqlParameter thisId = new MySqlParameter();
+      thisId.ParameterName = "@thisId";
+      thisId.Value = id;
+      cmd.Parameters.Add(thisId);
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+       conn.Dispose();
+      }
+    }
 
     public static Restaurant Find(int id)
     {
@@ -142,10 +147,10 @@ namespace BestRestaurants.Models
       {
         restaurantId = rdr.GetInt32(0);
         restaurantName = rdr.GetString(1);
-        restaurantRating = rdr.GetInt32(2)
+        restaurantRating = rdr.GetInt32(2);
         cuisineId = rdr.GetInt32(3);
       }
-      Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating cuisineId, restaurantId);
+      Restaurant newRestaurant = new Restaurant(restaurantName, restaurantRating, cuisineId, restaurantId);
       conn.Close();
       if (conn != null)
       {
@@ -176,7 +181,7 @@ namespace BestRestaurants.Models
       MySqlConnection conn = DB.Connection();
       conn.Open();
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO restaurants (name, rating, cuisineId) VALUES (@name, @rating, @cuisine_id);";
+      cmd.CommandText = @"INSERT INTO restaurants (name, rating, cuisine_id) VALUES (@name, @rating, @cuisine_id);";
       MySqlParameter name = new MySqlParameter();
       name.ParameterName = "@name";
       name.Value = this._rName;
@@ -210,10 +215,10 @@ namespace BestRestaurants.Models
       cmd.Parameters.Add(searchId);
       MySqlParameter name = new MySqlParameter();
       name.ParameterName = "@newName";
-      name.Value = newName;
+      name.Value = _rName;
       cmd.Parameters.Add(name);
       cmd.ExecuteNonQuery();
-      _name = newName;
+      _rName = newName;
       conn.Close();
       if (conn != null)
       {
